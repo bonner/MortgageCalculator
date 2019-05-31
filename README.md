@@ -12,13 +12,9 @@ NOTE: if any of the below commands fail with the permission denied error in Linu
 
 - if you are using maven, execute the below cmd to buid and start Spring Boot application-
 
-		$ ./mvnw package && java -jar target/spring-boot-docker-0.1.0.jar
+		$ ./mvnw package && java -jar target/mortgate-calculator-0.1.0.jar
 
-- if you are using gradle, execute the below cmd to buid and start Spring Boot application- 
-
-		$ ./gradlew build && java -jar build/libs/gs-spring-boot-docker-0.1.0.jar
-
-- Nevigate to http://localhost:8080[localhost:8080] to see your "Hello Docker World" message.
+- Navigate to http://localhost:8080/swagger-ui.html#!/mortgage-calculator-controller to see the API documentation 
 
 
 - To Containerize the Hello World Application (Refer the Dockerfile for details) run the cmds below which will build a Docker image in the name mydocker/spring-boot-docker:latest
@@ -34,14 +30,13 @@ NOTE: if any of the below commands fail with the permission denied error in Linu
 	 
 - Run the docker image with the below cmd
 	
-		$ docker run -p 8081:8080 -t mydocker/spring-boot-docker
+		$ docker run -p 8081:8080 -t mortgagecalculator/mortgate-calculator
 
-- Nevigate to http://localhost:8081[localhost:8081] to see your "Hello Docker World" message.
-
+- Navigate to http://localhost:8081/swagger-ui.html#!/mortgage-calculator-controller to see the API documentation 
 - Here 8081 is the Docker port and 8080 is the Tomcat port where is Spring Boot Application is 	running. 
 
 
-contact shrikarvk@gmail.com for more details and queries. 
+contact bonner.mike@gmail.com for more details and queries. 
 
 
 			

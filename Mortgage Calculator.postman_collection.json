@@ -1,0 +1,138 @@
+{
+	"info": {
+		"_postman_id": "07633c8b-a2bf-414d-9ae1-6bcc1d649d79",
+		"name": "Mortgage Calculator",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Mortgage Calculator Test GET payment-amount",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8080/payment-amount?asking_price=500000&down_payment=100000&payment_schedule=weekly&amortization_period=25",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"payment-amount"
+					],
+					"query": [
+						{
+							"key": "asking_price",
+							"value": "500000"
+						},
+						{
+							"key": "down_payment",
+							"value": "100000"
+						},
+						{
+							"key": "payment_schedule",
+							"value": "weekly"
+						},
+						{
+							"key": "amortization_period",
+							"value": "25"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Mortgage Calculator Test GET mortgage-amount",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8080/mortgage-amount?payment=413.86916952517157&down_payment=100000&payment_schedule=weekly&amortization_period=25",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"mortgage-amount"
+					],
+					"query": [
+						{
+							"key": "payment",
+							"value": "413.86916952517157"
+						},
+						{
+							"key": "down_payment",
+							"value": "100000"
+						},
+						{
+							"key": "payment_schedule",
+							"value": "weekly"
+						},
+						{
+							"key": "amortization_period",
+							"value": "25"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Mortgage Calculator Test GET interest-rate",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8080/interest-rate",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"interest-rate"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Mortgage Calculator Test PATCH interest-rate",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8080/interest-rate/4.6789",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"interest-rate",
+						"4.6789"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
