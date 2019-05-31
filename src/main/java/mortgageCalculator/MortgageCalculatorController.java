@@ -35,15 +35,6 @@ import io.swagger.annotations.ApiParam;
 @RestController
 public class MortgageCalculatorController {
 
-    private static double annualInterestRate = 2.5;
-    //private static final ArrayList<String> validPaymentSchedules = 
-    //		new ArrayList<String>(Arrays.asList("weekly", "biweekly", "monthly"));
-    private static final Map<String, Integer> schedule2PaymentsPerYear = Stream.of(
-        new AbstractMap.SimpleEntry<>("weekly", 4*12), 
-        new AbstractMap.SimpleEntry<>("biweekly", 52/2),
-        new AbstractMap.SimpleEntry<>("monthly", 12))
-        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-
     protected static ResponseEntity<Map<?, ?>> resp(HttpStatus status, Object... keyValues) {
         assert (keyValues.length % 2 == 0);
         Map<String, Object> map = new HashMap<>();
@@ -52,8 +43,18 @@ public class MortgageCalculatorController {
         }
         return new ResponseEntity<Map<?, ?>>(map, status);
     }
+    
+    private static double annualInterestRate = 2.5;
+    private static final Map<String, Integer> schedule2PaymentsPerYear = Stream.of(
+        new AbstractMap.SimpleEntry<>("weekly", 4*12), 
+        new AbstractMap.SimpleEntry<>("biweekly", 52/2),
+        new AbstractMap.SimpleEntry<>("monthly", 12))
+        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     private static final int minAmortizationPeriod = 5;
     private static final int maxAmortizationPeriod = 25;
+    private static final double minDpBound = 500000.0;
+    private static final double ltMinDpBoundRate = 0.05;
+    private static final double gtMinDpBoundRate = 0.1;
     /*
     interface FunctionalInterface 
     { 
@@ -77,9 +78,9 @@ n is your number of payments (the number of months you will be paying the loan)
     */
 
 
-    @ApiOperation(value = "Payment Amount", response = Map.class)
+    @ApiOperation(value = "Get the recurring payment amount of a mortgage", response = Map.class)
     @ApiResponses(value = { 
-            @ApiResponse(code = 200, message = "Successfully retrieved list"),
+            @ApiResponse(code = 200, message = "Successfully calculated mortgage payment"),
             @ApiResponse(code = 400, message = "Unexpected request data")})
     @RequestMapping(path = "/payment-amount", method = RequestMethod.GET, produces = "application/json")
     @ResponseStatus(HttpStatus.ACCEPTED)
@@ -87,19 +88,14 @@ n is your number of payments (the number of months you will be paying the loan)
     		@ApiParam(defaultValue = "500000") @RequestParam("asking_price") double askingPrice, 
             @ApiParam(defaultValue = "70000") @RequestParam("down_payment") double downPayment, 
             @ApiParam(defaultValue = "monthly", allowableValues = "weekly, biweekly, monthly") @RequestParam("payment_schedule") String paymentSchedule, 
-            @ApiParam(defaultValue = "20", value = "The number of years to paty off the loan, min 5 years, max 25 years", allowableValues = "range[5,25]") @RequestParam("amortization_period") int amortizationPeriod) {
+            @ApiParam(defaultValue = "25", value = "The number of years to paty off the loan, min 5 years, max 25 years", allowableValues = "range[5,25]") @RequestParam("amortization_period") int amortizationPeriod) {
 
     	ArrayList<String> errors = new ArrayList<String>();
-    	//Must be at least 5% of first $500k plus 10% of any amount above $500k (So $50k on a $750k
-    	//		mortgage)
-    	// add insurance into asking price?
-    	final double minDownPayment = askingPrice < 500000 ? 0.05*askingPrice : 0.05*500000 + 0.1*(askingPrice - 500000);
+    	final double minDownPayment = askingPrice < minDpBound ? ltMinDpBoundRate*askingPrice : 
+    		ltMinDpBoundRate*minDpBound + gtMinDpBoundRate*(askingPrice - minDpBound);
         paymentSchedule = paymentSchedule.toLowerCase();
-    	
+        
         // validate amortization_period, paymentSchedule
-    	//if (validPaymentSchedules.indexOf(paymentSchedule) == -1) {
-    	//	errors.add("Payment schedule must be one of " + validPaymentSchedules.toString());
-    	//}
     	if (!schedule2PaymentsPerYear.containsKey(paymentSchedule)) {
     		errors.add("Payment schedule must be one of " + schedule2PaymentsPerYear.keySet().toString());
     	}
@@ -131,7 +127,8 @@ n is your number of payments (the number of months you will be paying the loan)
     	int paymentsPerYear = schedule2PaymentsPerYear.get(paymentSchedule);
         double numPayments = amortizationPeriod * paymentsPerYear;
         
-        // calculate insurance, add to principal
+        // calculate insurance, add to principal, I am doing this after checking the minimum down 
+        // payment, we might have to do this before!
         /*
 		Mortgage insurance is required on all mortgages with less than 20% down. Insurance must be
 		calculated and added to the mortgage principal. Mortgage insurance is not available for
@@ -143,8 +140,19 @@ n is your number of payments (the number of months you will be paying the loan)
 		15%-19.99% 1.8%
 		20%+ N/A
         */
+        // TODO: externalize all hard coded numbers.
+        double dp2apRatio = downPayment / askingPrice;
+        double insurance = 0.;
+        if (dp2apRatio < 0.2 && askingPrice < 1e6) {
+        	if (dp2apRatio < 10.) 
+        		insurance = 0.0315*askingPrice;
+        	else if (dp2apRatio < 15.) 
+        		insurance = 0.024*askingPrice;
+        	else if (dp2apRatio < 20.) 
+        		insurance = 0.018*askingPrice;
+        }
 
-        double principal = askingPrice - downPayment;   
+        double principal = insurance + askingPrice - downPayment;   
         
         // annualInterestRate is an annual rate, we need to convert it to monthly
         // ... and then probably to weekly or biweekly.
@@ -162,7 +170,24 @@ n is your number of payments (the number of months you will be paying the loan)
         return resp(HttpStatus.OK, "payment", payment, "asking_price", askingPrice, 
                 "down_payment", downPayment, "payment_schedule", paymentSchedule, 
                 "amortization_period", amortizationPeriod, "num_payments", numPayments, 
-                "payments_per_year", paymentsPerYear);
+                "payments_per_year", paymentsPerYear, "minimum_down_payment", minDownPayment,
+                "downpayment_to_askingprice_ratio", dp2apRatio, "insurance", insurance, 
+                "principal", String.format("%6.1f = %6.1f + %6.1f - %6.1f", principal, insurance, askingPrice, downPayment));
+    }
+    
+    @ApiOperation(value = "Get the maximum mortgage amount", response = Map.class)
+    @ApiResponses(value = { 
+            @ApiResponse(code = 200, message = "Successfully retrieved list"),
+            @ApiResponse(code = 400, message = "Unexpected request data")})
+    @RequestMapping(path = "/mortgage-amount", method = RequestMethod.GET, produces = "application/json")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public ResponseEntity<Map<?, ?>> mortgageAmount(
+    		@ApiParam(defaultValue = "2000") @RequestParam("payment") double payment, 
+            @ApiParam(required = false, defaultValue = "70000") @RequestParam("down_payment") double downPayment, 
+            @ApiParam(defaultValue = "monthly", allowableValues = "weekly, biweekly, monthly") @RequestParam("payment_schedule") String paymentSchedule, 
+            @ApiParam(defaultValue = "25", value = "The number of years to paty off the loan, min 5 years, max 25 years", allowableValues = "range[5,25]") @RequestParam("amortization_period") int amortizationPeriod) {
+    	
+    	 return resp(HttpStatus.OK, "message", "hello");		
     }
 
     @ApiOperation(value = "Get interest rate", response = Map.class)
@@ -181,8 +206,8 @@ n is your number of payments (the number of months you will be paying the loan)
             })
     @RequestMapping(path = "/interest-rate/{annualInterestRate}", method = RequestMethod.PATCH, produces = "application/json")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public ResponseEntity<Map<?, ?>> setannualInterestRate(@ApiParam(value = 
-            "The new interest rate, must be greater than 0 and less than or equal to 100.", required = true, allowableValues = "range[0,100]") 
+    public ResponseEntity<Map<?, ?>> setannualInterestRate(
+    		@ApiParam(value = "The new interest rate, must be greater than 0 and less than or equal to 100.", required = true, allowableValues = "range[0,100]") 
             @PathVariable(name = "annualInterestRate", required = true) double newAnnualInterestRate) {
         
         // validate
