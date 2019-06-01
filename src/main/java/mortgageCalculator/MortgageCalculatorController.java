@@ -13,7 +13,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -40,13 +39,10 @@ public class MortgageCalculatorController {
         return new ResponseEntity<Map<?, ?>>(map, status);
     }
     
-    /*
-    @RequestMapping("/")
-    @ResponseBody
+    @RequestMapping(path = "/")
     String home() {
-      return "Hello World!";
+      return "<head><meta http-equiv=\"refresh\" content=\"0; URL='swagger-ui.html#/'\" /></head>";
     }
-    */
     
 
     @ApiOperation(value = "Get the recurring payment amount of a mortgage", response = Map.class)
