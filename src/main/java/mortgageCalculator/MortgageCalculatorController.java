@@ -40,11 +40,13 @@ public class MortgageCalculatorController {
         return new ResponseEntity<Map<?, ?>>(map, status);
     }
     
+    /*
     @RequestMapping("/")
     @ResponseBody
     String home() {
       return "Hello World!";
     }
+    */
     
 
     @ApiOperation(value = "Get the recurring payment amount of a mortgage", response = Map.class)
