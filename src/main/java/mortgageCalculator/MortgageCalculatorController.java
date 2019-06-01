@@ -52,11 +52,20 @@ public class MortgageCalculatorController {
     public ResponseEntity<Map<?, ?>> paymentAmount(
             @ApiParam(defaultValue = "500000") @RequestParam("asking_price") double askingPrice, 
             @ApiParam(defaultValue = "70000") @RequestParam("down_payment") double downPayment, 
+            @RequestParam(name = "annual_interest_rate", required = false) Double annualInterestRate,
             @ApiParam(defaultValue = "monthly", allowableValues = "weekly, biweekly, monthly") @RequestParam("payment_schedule") String paymentSchedule, 
             @ApiParam(defaultValue = "25", value = "The number of years to paty off the loan, min 5 years, max 25 years", allowableValues = "range[5,25]") @RequestParam("amortization_period") int amortizationPeriod) {
 
+    	System.out.printf("rate: %f\n", annualInterestRate);
+    	
+    	if (annualInterestRate == null)
+    		annualInterestRate = MortgageCalculator.getAnnualInterestRate();
+    	
+    	System.out.printf("rate: %f\n", annualInterestRate);
+    	
         try {
-            Map<?, ?> map = MortgageCalculator.paymentAmount(askingPrice, downPayment, paymentSchedule, amortizationPeriod);
+            Map<?, ?> map = MortgageCalculator.paymentAmount(askingPrice, downPayment, 
+            		paymentSchedule, amortizationPeriod, annualInterestRate);
             return resp(HttpStatus.OK, map);            
         }
         catch (IllegalArgumentException e) {
@@ -72,12 +81,23 @@ public class MortgageCalculatorController {
     @ResponseStatus(HttpStatus.ACCEPTED)
     public ResponseEntity<Map<?, ?>> mortgageAmount(
             @ApiParam(defaultValue = "2000") @RequestParam("payment") double payment, 
-            @ApiParam(defaultValue = "0") @RequestParam(name = "down_payment", required = false) double downPayment, 
+            @RequestParam(name = "down_payment", required = false) Double downPayment,
+            @RequestParam(name = "annual_interest_rate", required = false) Double annualInterestRate,
             @ApiParam(defaultValue = "monthly", allowableValues = "weekly, biweekly, monthly") @RequestParam("payment_schedule") String paymentSchedule, 
             @ApiParam(defaultValue = "25", value = "The number of years to paty off the loan, min 5 years, max 25 years", allowableValues = "range[5,25]") @RequestParam("amortization_period") int amortizationPeriod) {
-         
-         try {
-            Map<?, ?> map = MortgageCalculator.mortgageAmount(payment, downPayment, paymentSchedule, amortizationPeriod);
+        
+    	System.out.printf("down payment: %f rate: %f\n", downPayment, annualInterestRate);
+    	
+    	if (annualInterestRate == null)
+    		annualInterestRate = MortgageCalculator.getAnnualInterestRate();
+    	if (downPayment == null)
+    		downPayment = 0.0;
+    	
+    	System.out.printf("down payment: %f rate: %f\n", downPayment, annualInterestRate);
+    	
+        try {
+            Map<?, ?> map = MortgageCalculator.mortgageAmount(payment, downPayment, paymentSchedule, 
+            		amortizationPeriod, annualInterestRate);
             return resp(HttpStatus.OK, map);            
         }
         catch (IllegalArgumentException e) {
@@ -101,7 +121,7 @@ public class MortgageCalculatorController {
             })
     @RequestMapping(path = "/interest-rate/{annualInterestRate}", method = RequestMethod.PATCH, produces = "application/json")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public ResponseEntity<Map<?, ?>> setannualInterestRate(
+    public ResponseEntity<Map<?, ?>> setAnnualInterestRate(
             @ApiParam(value = "The new interest rate, must be greater than 0 and less than or equal to 100.", allowableValues = "range[0,100]") 
             @PathVariable(name = "annualInterestRate", required = true) double newAnnualInterestRate) {
         
