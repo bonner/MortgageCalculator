@@ -123,7 +123,6 @@ public class MortgageCalculator {
         double principal = insurance + askingPrice - downPayment;   
         
         // annualInterestRate is an annual rate, convert it to per payment.
-        System.out.println("in paymentAmount, interestRate = " + annualInterestRate);
         double rate = annualInterestRate / 100.0 / paymentsPerYear;
         
         // calculate the payment, P = L[c(1 + c)^n]/[(1 + c)^n - 1]
@@ -184,7 +183,6 @@ public class MortgageCalculator {
         
         double paymentsPerYear = schedule2PaymentsPerYear.get(paymentSchedule.toLowerCase());
         double numPayments = amortizationPeriod * paymentsPerYear;
-        System.out.println("annual interest rate = " + annualInterestRate);
         double rate = annualInterestRate / 100.0 / paymentsPerYear;
         
         double interestRateToNumPayments = Math.pow(1 + rate, numPayments);
@@ -192,7 +190,6 @@ public class MortgageCalculator {
         double maxMortgageAmount = (payment / denominator) + downPayment;
         
         return createMap("mortgage_amount", maxMortgageAmount,   
-                "annual_interest_rate", annualInterestRate,
                 "num_payments", numPayments, 
                 "rate", rate,
                 "payments_per_year", paymentsPerYear);        
@@ -245,7 +242,7 @@ public class MortgageCalculator {
      */
     private static void validateScheduleAndAmortization(String paymentSchedule, int amortizationPeriod,
             ArrayList<String> errors) {
-        // validate amortization_period, paymentSchedule
+        
         if (!schedule2PaymentsPerYear.containsKey(paymentSchedule.toLowerCase())) {
             errors.add("Payment schedule must be one of " + schedule2PaymentsPerYear.keySet().toString());
         }

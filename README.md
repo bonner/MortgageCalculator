@@ -24,17 +24,12 @@ NOTE: if any of the below commands fail with the permission denied error in Linu
 		$ ./mvnw install dockerfile:build
 		
  
-- if you are using Gradle, execute the below cmd - 
-
-		$ ./gradlew build docker
-	 
 - Run the docker image with the below cmd
 	
 		$ docker run -p 8081:8080 -t mortgagecalculator/mortgate-calculator
-
+                 
 - Navigate to http://localhost:8081/swagger-ui.html#!/mortgage-calculator-controller to see the API documentation 
 - Here 8081 is the Docker port and 8080 is the Tomcat port where is Spring Boot Application is 	running. 
-
 
 contact bonner.mike@gmail.com for more details and queries. 
 
