@@ -39,7 +39,7 @@ public class MortgageCalculatorController {
         return new ResponseEntity<Map<?, ?>>(map, status);
     }
     
-    @RequestMapping(path = "/")
+    @RequestMapping(path = "/", method = RequestMethod.GET)
     String home() {
       return "<head><meta http-equiv=\"refresh\" content=\"0; URL='swagger-ui.html#/'\" /></head>";
     }
