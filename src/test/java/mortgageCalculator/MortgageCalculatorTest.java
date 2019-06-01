@@ -66,6 +66,7 @@ public class MortgageCalculatorTest {
 		assertEquals(647, payment, 5);	
 		
 	}
+	
 	@Test
 	public void testPaymentAmountDefaultRate() {
 		
@@ -82,6 +83,24 @@ public class MortgageCalculatorTest {
 		double payment = Double.parseDouble(value.toString());
 		System.out.printf("monthly payment: %f\n", payment);
 		assertEquals(payment, 1792, 3);
+	}
+
+	@Test
+	public void testPaymentAmountLessThanMinBound() {
+		
+		double askingPrice = 400000, downPayment = 100000;
+		String paymentSchedule = "monthly";  
+		int amortizationPeriod = 25;
+		
+		// 1433 is the value from https://www.ratesupermarket.ca/mortgages/payment_calculator_results?province=8&mortgage_value=300000&mortgage_rate=2.5&payment_type=monthly&amortization_period=25
+		Map<?,?> result = MortgageCalculator.paymentAmount(askingPrice, downPayment, paymentSchedule, 
+				amortizationPeriod);
+		
+		assertTrue(result.containsKey("payment"));
+		Object value = result.get("payment");
+		double payment = Double.parseDouble(value.toString());
+		System.out.printf("monthly payment: %f\n", payment);
+		assertEquals(payment, 1344, 3);
 	}
 	
 	@Test
@@ -131,6 +150,29 @@ public class MortgageCalculatorTest {
 		assertEquals(maxMortgage, askingPrice, 1);
 	}
 	
+	@Test
+	public void testMortgageAmountUsingDefaults() {
+
+		double askingPrice = 500000, downPayment = 100000;
+		String paymentSchedule = "weekly";  
+		int amortizationPeriod = 25;
+		double rate = 5.;
+		
+		Map<?,?> result = MortgageCalculator.paymentAmount(askingPrice, downPayment, paymentSchedule, 
+				amortizationPeriod);	
+		
+		Object value = result.get("payment");
+		double payment = Double.parseDouble(value.toString());
+		System.out.printf("monthly payment: %f\n", payment);
+
+		result = MortgageCalculator.mortgageAmount(payment, paymentSchedule, amortizationPeriod);	
+		value = result.get("mortgage_amount");
+		double maxMortgage = Double.parseDouble(value.toString());
+		System.out.printf("max mortgage: %f\n", maxMortgage);
+		
+		assertEquals(askingPrice - downPayment, maxMortgage, 1);
+	}
+	
 	@Test 
 	public void testMinDownPayment() {
 		double askingPrice = 750000, downPayment = 50000;
@@ -155,6 +197,120 @@ public class MortgageCalculatorTest {
 		try {
 		    Map<?,?> result = MortgageCalculator.paymentAmount(askingPrice, downPayment, 
 		    		paymentSchedule, amortizationPeriod);
+		    fail("Calling paymentAmount with a down payment less than the minimum should raise an exception.");
+		}
+		catch (IllegalArgumentException e) {
+			
+		}
+	}
+	
+	@Test 
+	public void testScheduleValidation() {
+		double askingPrice = 750000, downPayment = 49000;
+		String paymentSchedule = "dne";  
+		int amortizationPeriod = 25;
+		
+		try {
+		    Map<?,?> result = MortgageCalculator.paymentAmount(askingPrice, downPayment, 
+		    		paymentSchedule, amortizationPeriod);
+		    fail("Calling paymentAmount with a unknown payment schedule should raise an exception.");
+		}
+		catch (IllegalArgumentException e) {
+			
+		}
+	}
+
+	@Test 
+	public void testAmortizationValidationMax() {
+		double askingPrice = 750000, downPayment = 49000;
+		String paymentSchedule = "monthly";  
+		int amortizationPeriod = 30;
+		
+		try {
+		    Map<?,?> result = MortgageCalculator.paymentAmount(askingPrice, downPayment, 
+		    		paymentSchedule, amortizationPeriod);
+		    fail("Calling paymentAmount with an invalid amortization value should raise an exception.");
+		}
+		catch (IllegalArgumentException e) {
+			
+		}
+	}
+	
+	@Test 
+	public void testAmortizationValidationMin() {
+		double askingPrice = 750000, downPayment = 49000;
+		String paymentSchedule = "weekly";  
+		int amortizationPeriod = 2;
+		
+		try {
+		    Map<?,?> result = MortgageCalculator.paymentAmount(askingPrice, downPayment, 
+		    		paymentSchedule, amortizationPeriod);
+		    fail("Calling paymentAmount with an invalid amortization value should raise an exception.");
+		}
+		catch (IllegalArgumentException e) {
+			
+		}
+	}
+	
+	@Test 
+	public void testNegativePricendDownpaymentValidation() {
+		double askingPrice = -100, downPayment = -120;
+		String paymentSchedule = "weekly";  
+		int amortizationPeriod = 20;
+		
+		try {
+		    Map<?,?> result = MortgageCalculator.paymentAmount(askingPrice, downPayment, 
+		    		paymentSchedule, amortizationPeriod);
+		    fail("Calling paymentAmount with an invalid amortization value should raise an exception.");
+		}
+		catch (IllegalArgumentException e) {
+			//e.printStackTrace();
+		}
+	}
+	
+	@Test 
+	public void testInterestRateValidation() {
+		double askingPrice = 750000, downPayment = 49000, rate = 101;
+		String paymentSchedule = "monthly";  
+		int amortizationPeriod = 25;
+		
+		try {
+		    Map<?,?> result = MortgageCalculator.paymentAmount(askingPrice, downPayment, 
+		    		paymentSchedule, amortizationPeriod, rate);
+		    fail("Calling paymentAmount with a invalid interest rate value should raise an exception.");
+		}
+		catch (IllegalArgumentException e) {
+			
+		}
+		rate = -1;
+		try {
+		    Map<?,?> result = MortgageCalculator.paymentAmount(askingPrice, downPayment, 
+		    		paymentSchedule, amortizationPeriod, rate);
+		    fail("Calling paymentAmount with a invalid interest rate value should raise an exception.");
+		}
+		catch (IllegalArgumentException e) {
+			
+		}
+	}
+	
+	@Test 
+	public void testMortgageAmountInterestRateValidation() {
+		double payment = 2500, downPayment = 49000, rate = 101;
+		String paymentSchedule = "monthly";  
+		int amortizationPeriod = 25;
+		
+		try {
+		    Map<?,?> result = MortgageCalculator.mortgageAmount(payment, downPayment, 
+		    		paymentSchedule, amortizationPeriod, rate);
+		    fail("Calling paymentAmount with a down payment less than the minimum should raise an exception.");
+		}
+		catch (IllegalArgumentException e) {
+			
+		}
+		rate = -1;
+		try {
+		    Map<?,?> result = MortgageCalculator.paymentAmount(payment, downPayment, 
+		    		paymentSchedule, amortizationPeriod, rate);
 		    fail("Calling paymentAmount with a down payment less than the minimum should raise an exception.");
 		}
 		catch (IllegalArgumentException e) {

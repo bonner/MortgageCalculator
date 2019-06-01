@@ -2,7 +2,6 @@
 Author: Michael Bonner 
 Date: 05/30/2019 
 */ 
-
 package mortgageCalculator;
 
 import java.util.HashMap;
@@ -14,8 +13,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -55,13 +52,9 @@ public class MortgageCalculatorController {
             @RequestParam(name = "annual_interest_rate", required = false) Double annualInterestRate,
             @ApiParam(defaultValue = "monthly", allowableValues = "weekly, biweekly, monthly") @RequestParam("payment_schedule") String paymentSchedule, 
             @ApiParam(defaultValue = "25", value = "The number of years to paty off the loan, min 5 years, max 25 years", allowableValues = "range[5,25]") @RequestParam("amortization_period") int amortizationPeriod) {
-
-    	System.out.printf("rate: %f\n", annualInterestRate);
     	
     	if (annualInterestRate == null)
     		annualInterestRate = MortgageCalculator.getAnnualInterestRate();
-    	
-    	System.out.printf("rate: %f\n", annualInterestRate);
     	
         try {
             Map<?, ?> map = MortgageCalculator.paymentAmount(askingPrice, downPayment, 
@@ -85,15 +78,11 @@ public class MortgageCalculatorController {
             @RequestParam(name = "annual_interest_rate", required = false) Double annualInterestRate,
             @ApiParam(defaultValue = "monthly", allowableValues = "weekly, biweekly, monthly") @RequestParam("payment_schedule") String paymentSchedule, 
             @ApiParam(defaultValue = "25", value = "The number of years to paty off the loan, min 5 years, max 25 years", allowableValues = "range[5,25]") @RequestParam("amortization_period") int amortizationPeriod) {
-        
-    	System.out.printf("down payment: %f rate: %f\n", downPayment, annualInterestRate);
     	
     	if (annualInterestRate == null)
     		annualInterestRate = MortgageCalculator.getAnnualInterestRate();
     	if (downPayment == null)
     		downPayment = 0.0;
-    	
-    	System.out.printf("down payment: %f rate: %f\n", downPayment, annualInterestRate);
     	
         try {
             Map<?, ?> map = MortgageCalculator.mortgageAmount(payment, downPayment, paymentSchedule, 
@@ -134,6 +123,13 @@ public class MortgageCalculatorController {
     }
 
     public static void main(String[] args) {
+    	
+        String ENV_PORT = System.getenv().get("PORT");
+        String ENV_DYNO = System.getenv().get("DYNO");
+        if(ENV_PORT != null && ENV_DYNO != null) {
+            System.getProperties().put("server.port", ENV_PORT);
+        }
+        
         SpringApplication.run(MortgageCalculatorController.class, args);
     }
 

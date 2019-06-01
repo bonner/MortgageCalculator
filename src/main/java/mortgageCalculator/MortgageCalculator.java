@@ -1,3 +1,7 @@
+/*
+Author: Michael Bonner 
+Date: 05/30/2019 
+*/ 
 package mortgageCalculator;
 
 import java.util.Map;
@@ -89,10 +93,9 @@ public class MortgageCalculator {
         
         validateScheduleAndAmortization(paymentSchedule, amortizationPeriod, errors);
         
-        if (!validateInterestRate(annualInterestRate))
+        if (!validateInterestRate(annualInterestRate)) {
         	errors.add("The interest rate must be greater than zero and less than or equal to 100.");
-        
-        // validate downPayment is less than the asking price.
+        }
         if (downPayment > askingPrice) {
             errors.add("The down payment cannot exceed the asking price.");
         }
@@ -102,7 +105,6 @@ public class MortgageCalculator {
         if (askingPrice < 0) {
             errors.add("The asking price must be larger than zero.");
         }
-        //
         if (downPayment < minDownPayment) {
             errors.add(String.format("The down payment must be greater than %6.2f", minDownPayment));
         }
@@ -116,9 +118,9 @@ public class MortgageCalculator {
         double paymentsPerYear = schedule2PaymentsPerYear.get(paymentSchedule);
         double numPayments = amortizationPeriod * paymentsPerYear;
         
-        // calculate insurance, add to principal, I am doing this after checking the minimum down 
-        // payment, should this be done before, ie is the minimum down payment a function of asking 
-        // price or asking price + insurance?
+        // calculate insurance, add to principal
+        // I am doing this after checking the minimum down payment, should this be done before, ie 
+        // is the minimum down payment a function of asking price or asking price + insurance?
         double insurance = calculateInsurance(askingPrice, downPayment);
         double principal = insurance + askingPrice - downPayment;   
         
@@ -127,10 +129,8 @@ public class MortgageCalculator {
         
         // calculate the payment, P = L[c(1 + c)^n]/[(1 + c)^n - 1]
         double interestRateToNumPayments = Math.pow(1 + rate, numPayments);
-        double payment = principal * rate * interestRateToNumPayments / (interestRateToNumPayments - 1);
-        
-        System.out.printf("rate: %f paymentsPerYear: %f numPayments: %f principal: %f payment: %f\n", 
-                rate, paymentsPerYear, numPayments, principal, payment);
+        double payment = principal * rate * 
+        		interestRateToNumPayments / (interestRateToNumPayments - 1);
           
         return createMap("payment", payment, 
         		"num_payments", numPayments, 
@@ -149,7 +149,6 @@ public class MortgageCalculator {
      */
     static public Map<?, ?> paymentAmount(double askingPrice, double downPayment, String paymentSchedule,  
             int amortizationPeriod) {
-    	System.out.println("WRAPPER CALLED");
         return paymentAmount(askingPrice, downPayment, paymentSchedule, amortizationPeriod, 
         		MortgageCalculator.annualInterestRate);	
     }
