@@ -15,12 +15,13 @@
 					"raw": ""
 				},
 				"url": {
-					"raw": "http://localhost:8080/payment-amount?asking_price=500000&down_payment=100000&payment_schedule=weekly&amortization_period=25",
-					"protocol": "http",
+					"raw": "https://mortgage-calculator-96513.herokuapp.com/payment-amount?asking_price=500000&down_payment=100000&payment_schedule=weekly&amortization_period=25",
+					"protocol": "https",
 					"host": [
-						"localhost"
+						"mortgage-calculator-96513",
+						"herokuapp",
+						"com"
 					],
-					"port": "8080",
 					"path": [
 						"payment-amount"
 					],
@@ -56,12 +57,13 @@
 					"raw": ""
 				},
 				"url": {
-					"raw": "http://localhost:8080/mortgage-amount?payment=413.86916952517157&down_payment=100000&payment_schedule=weekly&amortization_period=25",
-					"protocol": "http",
+					"raw": "https://mortgage-calculator-96513.herokuapp.com/mortgage-amount?payment=413.86916952517157&down_payment=100000&payment_schedule=weekly&amortization_period=25",
+					"protocol": "https",
 					"host": [
-						"localhost"
+						"mortgage-calculator-96513",
+						"herokuapp",
+						"com"
 					],
-					"port": "8080",
 					"path": [
 						"mortgage-amount"
 					],
@@ -97,12 +99,13 @@
 					"raw": ""
 				},
 				"url": {
-					"raw": "http://localhost:8080/interest-rate",
-					"protocol": "http",
+					"raw": "https://mortgage-calculator-96513.herokuapp.com/interest-rate",
+					"protocol": "https",
 					"host": [
-						"localhost"
+						"mortgage-calculator-96513",
+						"herokuapp",
+						"com"
 					],
-					"port": "8080",
 					"path": [
 						"interest-rate"
 					]
@@ -120,12 +123,13 @@
 					"raw": ""
 				},
 				"url": {
-					"raw": "http://localhost:8080/interest-rate/4.6789",
-					"protocol": "http",
+					"raw": "https://mortgage-calculator-96513.herokuapp.com/interest-rate/4.6789",
+					"protocol": "https",
 					"host": [
-						"localhost"
+						"mortgage-calculator-96513",
+						"herokuapp",
+						"com"
 					],
-					"port": "8080",
 					"path": [
 						"interest-rate",
 						"4.6789"
