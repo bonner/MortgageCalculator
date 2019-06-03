@@ -27,7 +27,7 @@ For _/morgage-amount_, if the down payment is included its value is added to the
 
 Documentation can be viewed at http://localhost:8081/swagger-ui.html#!/mortgage-calculator-controller once the application is running.
 
-A postman collection is also available in _Mortgage Calculator.postman_collection.json_ that demonstrates API usage.
+A postman collection is also available in [Mortgage Calculator.postman_collection.json](https://github.com/bonner/MortgageCalculator/blob/master/Mortgage%20Calculator.postman_collection.json) that demonstrates API usage.
      
 The API is currently publicly available at https://mortgage-calculator-96513.herokuapp.com, API documentation is at https://mortgage-calculator-96513.herokuapp.com/swagger-ui.html.
 
