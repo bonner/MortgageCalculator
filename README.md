@@ -1,25 +1,59 @@
-This guide walks you through the process of building a Docker image for running a Spring Boot application.
+# Mortgage Calculator REST API
 
-prerequisites: 
-		1. Java 1.8 or above
-		2. Latest version of Gradle or Maven
-		3. Latest version of Docker
+This is a spring boot application that implements a RESTful API that calculates the payment for a given asking price and the maximum mortgage for a desired payment amount.
+The following equation is used to do these calculations:
+
+     Payment formula: P = L[c(1 + c)^n]/[(1 + c)^n - 1]
+          P = Payment
+          L = Loan Principal
+          c = Interest Rate 
+          n = the number of payments 
+Mortgage insurance is added to the principal for all mortgages with less than 20% down. 
+Mortgage insurance is not available for mortgages greater than $1 million.
+Mortgage insurance rates are as follows:
+
+     Down payment Insurance Cost
+       5-9.99% 3.15%
+       10-14.99% 2.4%
+       15%-19.99% 1.8%
+       20%+ N/A
+       
+For /payment-amount the down payment must be at least 5% of first $500k plus 10% of any amount above $500k (So $50k on a $750k
+mortgage).
+
+For /payment-amount and /mortgage-amount the amortization period can be within 5 to 25 years. The valid payment schedules are: Weekly, biweekly, monthly.
+
+For /morgage-amount if the down payment is included its value is added to the maximum mortgage returned.
+
+Documentation can be viewed at http://localhost:8081/swagger-ui.html#!/mortgage-calculator-controller once the application is running.
+
+A postman collection is also available in Mortgage Calculator.postman_collection.json that demonstrates API usage.
+     
+The API is currently publicly available at https://mortgage-calculator-96513.herokuapp.com, API documentation is at https://mortgage-calculator-96513.herokuapp.com/swagger-ui.html.
+
+##Prerequisites: 
+		1. Java 1.8 or above (10.0.2)
+		2. Latest version of Maven (3.6.1)
+		3. Latest version of Docker (18.09.2)
 		4. If you are NOT using a Linux machine, you will need a virtualized server. Visit https://www.virtualbox.org/wiki/Downloads for Download and install
+
+##Building
 
 Follow the below steps in sequence.
 
 NOTE: if any of the below commands fail with the permission denied error in Linux env, prefix <sudo> to each cmds to run the cmds in root
 
-- if you are using maven, execute the below cmd to buid and start Spring Boot application-
+- Execute the below cmd to buid and start the application
 
 		$ ./mvnw package && java -jar target/mortgate-calculator-0.1.0.jar
 
 - Navigate to http://localhost:8080/swagger-ui.html#!/mortgage-calculator-controller to see the API documentation 
 
 
-- To Containerize the Hello World Application (Refer the Dockerfile for details) run the cmds below which will build a Docker image in the name mydocker/spring-boot-docker:latest
+- To Containerize the mortgate calculator Application (Refer the Dockerfile for details) run the cmds below which will build a Docker image in the name mortgagecalculator/mortgate-calculator:latest
 
-- if you are using maven, execute the below cmd - 
+
+- execute the below cmd 
 
 		$ ./mvnw install dockerfile:build
 		

@@ -42,7 +42,7 @@ public class MortgageCalculatorTest {
 		assertTrue(result.containsKey("payment"));
 		Object value = result.get("payment");
 		double payment = Double.parseDouble(value.toString());
-		System.out.printf("monthly payment: %f\n", payment);
+		System.out.printf("monthly payment: %f insurance: %s\n", payment, result.get("insurance"));
 		assertEquals(2802, payment, 30);
 		
 		//1293 is the value https://www.ratesupermarket.ca/mortgages/payment_calculator_results?province=8&mortgage_value=400000&mortgage_rate=7&payment_type=bi_weekly&amortization_period=25
@@ -156,14 +156,13 @@ public class MortgageCalculatorTest {
 		double askingPrice = 500000, downPayment = 100000;
 		String paymentSchedule = "weekly";  
 		int amortizationPeriod = 25;
-		double rate = 5.;
 		
 		Map<?,?> result = MortgageCalculator.paymentAmount(askingPrice, downPayment, paymentSchedule, 
 				amortizationPeriod);	
 		
 		Object value = result.get("payment");
 		double payment = Double.parseDouble(value.toString());
-		System.out.printf("monthly payment: %f\n", payment);
+		System.out.printf("monthly payment: %f insurance: %s\n", payment, result.get("insurance"));
 
 		result = MortgageCalculator.mortgageAmount(payment, paymentSchedule, amortizationPeriod);	
 		value = result.get("mortgage_amount");

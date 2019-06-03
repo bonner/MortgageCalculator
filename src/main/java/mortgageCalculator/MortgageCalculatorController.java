@@ -56,7 +56,7 @@ public class MortgageCalculatorController {
             @ApiParam(defaultValue = "70000") @RequestParam("down_payment") double downPayment, 
             @RequestParam(name = "annual_interest_rate", required = false) Double annualInterestRate,
             @ApiParam(defaultValue = "monthly", allowableValues = "weekly, biweekly, monthly") @RequestParam("payment_schedule") String paymentSchedule, 
-            @ApiParam(defaultValue = "25", value = "The number of years to paty off the loan, min 5 years, max 25 years", allowableValues = "range[5,25]") @RequestParam("amortization_period") int amortizationPeriod) {
+            @ApiParam(defaultValue = "25", value = "The length of the loan in years, min 5 years, max 25 years", allowableValues = "range[5,25]") @RequestParam("amortization_period") int amortizationPeriod) {
     	
     	if (annualInterestRate == null)
     		annualInterestRate = MortgageCalculator.getAnnualInterestRate();
@@ -82,7 +82,7 @@ public class MortgageCalculatorController {
             @RequestParam(name = "down_payment", required = false) Double downPayment,
             @RequestParam(name = "annual_interest_rate", required = false) Double annualInterestRate,
             @ApiParam(defaultValue = "monthly", allowableValues = "weekly, biweekly, monthly") @RequestParam("payment_schedule") String paymentSchedule, 
-            @ApiParam(defaultValue = "25", value = "The number of years to paty off the loan, min 5 years, max 25 years", allowableValues = "range[5,25]") @RequestParam("amortization_period") int amortizationPeriod) {
+            @ApiParam(defaultValue = "25", value = "The length of the loan in years, min 5 years, max 25 years", allowableValues = "range[5,25]") @RequestParam("amortization_period") int amortizationPeriod) {
     	
     	if (annualInterestRate == null)
     		annualInterestRate = MortgageCalculator.getAnnualInterestRate();

@@ -62,7 +62,7 @@ public class MortgageCalculator {
      *     P = Payment
      *     L = Loan Principal
      *     c = Interest Rate 
-     *     n is the number of payments 
+     *     n = the number of payments 
      *    
      * Mortgage insurance is added to the principal for all mortgages with less than 20% down. 
      * Mortgage insurance is not available for
@@ -125,12 +125,14 @@ public class MortgageCalculator {
         double principal = insurance + askingPrice - downPayment;   
         
         // annualInterestRate is an annual rate, convert it to per payment.
-        double rate = annualInterestRate / 100.0 / paymentsPerYear;
+        double rate = annualInterestRate / (100.0 * paymentsPerYear);
+        
+        //rate = annualInterestRate / 100.;
         
         // calculate the payment, P = L[c(1 + c)^n]/[(1 + c)^n - 1]
-        double interestRateToNumPayments = Math.pow(1 + rate, numPayments);
+        double interestRateToNumPayments = Math.pow(1.0 + rate, numPayments);
         double payment = principal * rate * 
-        		interestRateToNumPayments / (interestRateToNumPayments - 1);
+        		interestRateToNumPayments / (interestRateToNumPayments - 1.0);
           
         return createMap("payment", payment, 
         		"num_payments", numPayments, 
