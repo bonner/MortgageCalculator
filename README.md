@@ -29,7 +29,7 @@ Full API usage can be found at http://localhost:8081/swagger-ui.html#!/mortgage-
 
 A postman collection is also available in [Mortgage Calculator.postman_collection.json](https://github.com/bonner/MortgageCalculator/blob/master/Mortgage%20Calculator.postman_collection.json) that demonstrates API usage.
      
-The API is currently publicly available at https://mortgage-calculator-96513.herokuapp.com, API documentation is at https://mortgage-calculator-96513.herokuapp.com/swagger-ui.html.
+The API is currently publicly available at https://mortgage-calculator-96513.herokuapp.com, API documentation is at https://mortgage-calculator-96513.herokuapp.com/swagger-ui.html. A heroku pipeline has been set up that automatically deploys the application in response to changes in the master branch of this repository.
 
 The EclEmma eclipse plugin was used to calculate test coverage, currently coverage of the MortgageCalculator class is >98%.
 
