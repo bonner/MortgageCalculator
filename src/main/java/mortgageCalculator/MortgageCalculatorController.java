@@ -57,13 +57,13 @@ public class MortgageCalculatorController {
             @RequestParam(name = "annual_interest_rate", required = false) Double annualInterestRate,
             @ApiParam(defaultValue = "monthly", allowableValues = "weekly, biweekly, monthly") @RequestParam("payment_schedule") String paymentSchedule, 
             @ApiParam(defaultValue = "25", value = "The length of the loan in years, min 5 years, max 25 years", allowableValues = "range[5,25]") @RequestParam("amortization_period") int amortizationPeriod) {
-    	
-    	if (annualInterestRate == null)
-    		annualInterestRate = MortgageCalculator.getAnnualInterestRate();
-    	
+        
+        if (annualInterestRate == null)
+            annualInterestRate = MortgageCalculator.getAnnualInterestRate();
+        
         try {
             Map<?, ?> map = MortgageCalculator.paymentAmount(askingPrice, downPayment, 
-            		paymentSchedule, amortizationPeriod, annualInterestRate);
+                    paymentSchedule, amortizationPeriod, annualInterestRate);
             return resp(HttpStatus.OK, map);            
         }
         catch (IllegalArgumentException e) {
@@ -83,15 +83,15 @@ public class MortgageCalculatorController {
             @RequestParam(name = "annual_interest_rate", required = false) Double annualInterestRate,
             @ApiParam(defaultValue = "monthly", allowableValues = "weekly, biweekly, monthly") @RequestParam("payment_schedule") String paymentSchedule, 
             @ApiParam(defaultValue = "25", value = "The length of the loan in years, min 5 years, max 25 years", allowableValues = "range[5,25]") @RequestParam("amortization_period") int amortizationPeriod) {
-    	
-    	if (annualInterestRate == null)
-    		annualInterestRate = MortgageCalculator.getAnnualInterestRate();
-    	if (downPayment == null)
-    		downPayment = 0.0;
-    	
+        
+        if (annualInterestRate == null)
+            annualInterestRate = MortgageCalculator.getAnnualInterestRate();
+        if (downPayment == null)
+            downPayment = 0.0;
+        
         try {
             Map<?, ?> map = MortgageCalculator.mortgageAmount(payment, downPayment, paymentSchedule, 
-            		amortizationPeriod, annualInterestRate);
+                    amortizationPeriod, annualInterestRate);
             return resp(HttpStatus.OK, map);            
         }
         catch (IllegalArgumentException e) {
@@ -128,7 +128,7 @@ public class MortgageCalculatorController {
     }
 
     public static void main(String[] args) {
-    	
+        
         String ENV_PORT = System.getenv().get("PORT");
         String ENV_DYNO = System.getenv().get("DYNO");
         if(ENV_PORT != null && ENV_DYNO != null) {

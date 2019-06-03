@@ -94,7 +94,7 @@ public class MortgageCalculator {
         validateScheduleAndAmortization(paymentSchedule, amortizationPeriod, errors);
         
         if (!validateInterestRate(annualInterestRate)) {
-        	errors.add("The interest rate must be greater than zero and less than or equal to 100.");
+            errors.add("The interest rate must be greater than zero and less than or equal to 100.");
         }
         if (downPayment > askingPrice) {
             errors.add("The down payment cannot exceed the asking price.");
@@ -132,11 +132,11 @@ public class MortgageCalculator {
         // calculate the payment, P = L[c(1 + c)^n]/[(1 + c)^n - 1]
         double interestRateToNumPayments = Math.pow(1.0 + rate, numPayments);
         double payment = principal * rate * 
-        		interestRateToNumPayments / (interestRateToNumPayments - 1.0);
+                interestRateToNumPayments / (interestRateToNumPayments - 1.0);
           
         return createMap("payment", payment, 
-        		"num_payments", numPayments, 
-        		"rate", rate,
+                "num_payments", numPayments, 
+                "rate", rate,
                 "payments_per_year", paymentsPerYear, 
                 "minimum_down_payment", minDownPayment,
                 "downpayment_to_askingprice_ratio", downPayment / askingPrice,
@@ -152,7 +152,7 @@ public class MortgageCalculator {
     static public Map<?, ?> paymentAmount(double askingPrice, double downPayment, String paymentSchedule,  
             int amortizationPeriod) {
         return paymentAmount(askingPrice, downPayment, paymentSchedule, amortizationPeriod, 
-        		MortgageCalculator.annualInterestRate);	
+                MortgageCalculator.annualInterestRate);    
     }
 
     /**
@@ -174,7 +174,7 @@ public class MortgageCalculator {
         
         validateScheduleAndAmortization(paymentSchedule, amortizationPeriod, errors);
         if (!validateInterestRate(annualInterestRate))
-        	errors.add("The interest rate must be greater than zero and less than or equal to 100.");
+            errors.add("The interest rate must be greater than zero and less than or equal to 100.");
         
         if (errors.size() > 0) {
             StringJoiner sj = new StringJoiner(", ");
@@ -204,7 +204,7 @@ public class MortgageCalculator {
     static public Map<?, ?> mortgageAmount(double payment, 
             String paymentSchedule, int amortizationPeriod) {
         return mortgageAmount(payment, 0.0, paymentSchedule, amortizationPeriod, 
-        		MortgageCalculator.annualInterestRate);
+                MortgageCalculator.annualInterestRate);
     }
 
     /**
@@ -258,7 +258,7 @@ public class MortgageCalculator {
      * @return True if the interest rate is valid.
      */
     private static boolean validateInterestRate(double interestRate) {
-    	return interestRate > 0.0 && interestRate <= 100.0;    	
+        return interestRate > 0.0 && interestRate <= 100.0;        
     }
 
     /**
@@ -275,10 +275,10 @@ public class MortgageCalculator {
         double dp2apRatio = downPayment / askingPrice, insurance = 0.;
       
         for (int i = 0; i < dp2atRatioBounds.length; i++) {
-        	if (dp2apRatio < dp2atRatioBounds[i]) {
-        		insurance = insurancePercentages[i]*askingPrice;
-        		break;
-        	}
+            if (dp2apRatio < dp2atRatioBounds[i]) {
+                insurance = insurancePercentages[i]*askingPrice;
+                break;
+            }
         }
         return insurance;
     }
