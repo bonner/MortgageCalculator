@@ -18,26 +18,28 @@ Mortgage insurance rates are as follows:
        15%-19.99% 1.8%
        20%+ N/A
        
-For /payment-amount the down payment must be at least 5% of first $500k plus 10% of any amount above $500k (So $50k on a $750k
+For _/payment-amount_, the down payment must be at least 5% of first $500k plus 10% of any amount above $500k (So $50k on a $750k
 mortgage).
 
-For /payment-amount and /mortgage-amount the amortization period can be within 5 to 25 years. The valid payment schedules are: Weekly, biweekly, monthly.
+For _/payment-amount_ and _/mortgage-amount_, the amortization period can be within 5 to 25 years. Valid payment schedules are: Weekly, biweekly, monthly.
 
-For /morgage-amount if the down payment is included its value is added to the maximum mortgage returned.
+For _/morgage-amount_, if the down payment is included its value is added to the maximum mortgage returned.
 
 Documentation can be viewed at http://localhost:8081/swagger-ui.html#!/mortgage-calculator-controller once the application is running.
 
-A postman collection is also available in Mortgage Calculator.postman_collection.json that demonstrates API usage.
+A postman collection is also available in _Mortgage Calculator.postman_collection.json_ that demonstrates API usage.
      
 The API is currently publicly available at https://mortgage-calculator-96513.herokuapp.com, API documentation is at https://mortgage-calculator-96513.herokuapp.com/swagger-ui.html.
 
-##Prerequisites: 
-		1. Java 1.8 or above (10.0.2)
-		2. Latest version of Maven (3.6.1)
-		3. Latest version of Docker (18.09.2)
-		4. If you are NOT using a Linux machine, you will need a virtualized server. Visit https://www.virtualbox.org/wiki/Downloads for Download and install
+The EclEmma eclipse plugin was used to calculate test coverage, currently coverage of the MortgageCalculator class is >98%.
 
-##Building
+## Prerequisites: 
+* Java 10.0.2
+* Maven 3.6.1
+* Docker 18.09.2
+* If you are NOT using a Linux machine, you will need a virtualized server. Visit https://www.virtualbox.org/wiki/Downloads for Download and install
+
+## Building
 
 Follow the below steps in sequence.
 
@@ -50,7 +52,7 @@ NOTE: if any of the below commands fail with the permission denied error in Linu
 - Navigate to http://localhost:8080/swagger-ui.html#!/mortgage-calculator-controller to see the API documentation 
 
 
-- To Containerize the mortgate calculator Application (Refer the Dockerfile for details) run the cmds below which will build a Docker image in the name mortgagecalculator/mortgate-calculator:latest
+- To containerize the mortgate calculator Application (Refer the Dockerfile for details) run the cmds below which will build a Docker image in the name mortgagecalculator/mortgate-calculator:latest
 
 
 - execute the below cmd 
@@ -63,9 +65,6 @@ NOTE: if any of the below commands fail with the permission denied error in Linu
 		$ docker run -p 8081:8080 -t mortgagecalculator/mortgate-calculator
                  
 - Navigate to http://localhost:8081/swagger-ui.html#!/mortgage-calculator-controller to see the API documentation 
-- Here 8081 is the Docker port and 8080 is the Tomcat port where is Spring Boot Application is 	running. 
+- Here 8081 is the Docker port and 8080 is the Tomcat port where the application is running. 
 
-contact bonner.mike@gmail.com for more details and queries. 
-
-
-			
+contact bonner.mike@gmail.com for more details and inquiries. 
