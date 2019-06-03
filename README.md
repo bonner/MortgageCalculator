@@ -25,7 +25,7 @@ For _/payment-amount_ and _/mortgage-amount_, the amortization period can be wit
 
 For _/morgage-amount_, if the down payment is included its value is added to the maximum mortgage returned.
 
-Documentation can be viewed at http://localhost:8081/swagger-ui.html#!/mortgage-calculator-controller once the application is running.
+Full API usage can be found at http://localhost:8081/swagger-ui.html#!/mortgage-calculator-controller once the application is running.
 
 A postman collection is also available in [Mortgage Calculator.postman_collection.json](https://github.com/bonner/MortgageCalculator/blob/master/Mortgage%20Calculator.postman_collection.json) that demonstrates API usage.
      
