@@ -47,7 +47,7 @@ NOTE: if any of the below commands fail with the permission denied error in Linu
 
 - Execute the below cmd to buid and start the application
 
-		$ ./mvnw package && java -jar target/mortgate-calculator-0.1.0.jar
+		$ ./mvnw package && java -jar target/mortgate-calculator-1.0.0.jar
 
 - Navigate to http://localhost:8080/swagger-ui.html#!/mortgage-calculator-controller to see the API documentation 
 
