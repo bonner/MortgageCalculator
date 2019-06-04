@@ -117,7 +117,7 @@ public class MortgageCalculator {
         // calculate the number of payments n
         double paymentsPerYear = schedule2PaymentsPerYear.get(paymentSchedule);
         double numPayments = amortizationPeriod * paymentsPerYear;
-        
+        		
         // calculate insurance, add to principal
         // I am doing this after checking the minimum down payment, should this be done before, ie 
         // is the minimum down payment a function of asking price or asking price + insurance?
@@ -127,12 +127,13 @@ public class MortgageCalculator {
         // annualInterestRate is an annual rate, convert it to per payment.
         double rate = annualInterestRate / (100.0 * paymentsPerYear);
         
-        //rate = annualInterestRate / 100.;
-        
         // calculate the payment, P = L[c(1 + c)^n]/[(1 + c)^n - 1]
         double interestRateToNumPayments = Math.pow(1.0 + rate, numPayments);
         double payment = principal * rate * 
                 interestRateToNumPayments / (interestRateToNumPayments - 1.0);
+        
+        System.out.printf("principal: %f rate: %f numPayments: %f paymentsPerYear: %f payment: %f\n", principal, rate, numPayments, 
+        		paymentsPerYear, payment);
           
         return createMap("payment", payment, 
                 "num_payments", numPayments, 

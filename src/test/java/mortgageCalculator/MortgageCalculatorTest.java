@@ -30,6 +30,23 @@ public class MortgageCalculatorTest {
 	}	
 	
 	@Test
+	public void testPaymentAmountOnlineExample() {
+		
+		double askingPrice = 200000, downPayment = 100000, rate = 6.;
+		String paymentSchedule = "monthly";  
+		int amortizationPeriod = 15;
+		
+		// 843.86 is the example from https://www.wikihow.com/Calculate-Mortgage-Payments
+		Map<?,?> result = MortgageCalculator.paymentAmount(askingPrice, downPayment, paymentSchedule, 
+				amortizationPeriod, rate);
+		assertTrue(result.containsKey("payment"));
+		Object value = result.get("payment");
+		double payment = Double.parseDouble(value.toString());
+		System.out.printf("monthly payment: %f insurance: %s\n", payment, result.get("insurance"));
+		assertEquals(843.86, payment, 1.);
+	}
+		
+	@Test
 	public void testPaymentAmount() {
 		
 		double askingPrice = 500000, downPayment = 100000, rate = 7.;

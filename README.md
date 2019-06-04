@@ -68,3 +68,7 @@ NOTE: if any of the below commands fail with the permission denied error in Linu
 - Here 8081 is the Docker port and 8080 is the Tomcat port where the application is running. 
 
 contact bonner.mike@gmail.com for more details and inquiries. 
+
+### TODO:
+* add security
+* add db backend
