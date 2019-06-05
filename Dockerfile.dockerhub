@@ -10,7 +10,7 @@ RUN ls -l /tmp/target/dependency/BOOT-INF
 RUN ls -l /tmp/target/dependency/META-INF
 
 FROM openjdk:8-jdk-alpine
-VOLUME /tmp
+#VOLUME /tmp
 ARG DEPENDENCY=/tmp/target/dependency
 RUN echo "DEPENDENCY="${DEPENDENCY}
 RUN ls -l /tmp/target/dependency/BOOT-INF
