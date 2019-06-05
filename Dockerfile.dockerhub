@@ -14,11 +14,7 @@ FROM openjdk:8-jdk-alpine
 VOLUME /tmp
 ARG DEPENDENCY=/tmp/target/dependency
 RUN echo "DEPENDENCY="${DEPENDENCY}
-RUN ls -l /tmp/target/dependency/BOOT-INF
 COPY --from=build-env ${DEPENDENCY}/BOOT-INF/lib /app/lib
-RUN ls -l /tmp/target/dependency/META-INF
 COPY --from=build-env ${DEPENDENCY}/META-INF /app/META-INF
-RUN ls -l /tmp/target/dependency/BOOT-INF/classes
-RUN ls -l ${DEPENDENCY}/BOOT-INF/classes
 COPY --from=build-env ${DEPENDENCY}/BOOT-INF/classes /app
 ENTRYPOINT ["java","-cp","app:app/lib/*","mortgageCalculator.MortgageCalculatorController"]
