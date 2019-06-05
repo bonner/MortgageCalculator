@@ -6,8 +6,8 @@ RUN mvn package
 RUN ls -l /tmp 
 RUN ls -l /tmp/target 
 RUN ls -l /tmp/target/dependency 
-RUN ls -l /tmp/dependency/BOOT-INF
-RUN ls -l /tmp/dependency/META-INF
+RUN ls -l /tmp/target/dependency/BOOT-INF
+RUN ls -l /tmp/target/dependency/META-INF
 
 FROM openjdk:8-jdk-alpine
 VOLUME /tmp
