@@ -1,4 +1,4 @@
-FROM maven:latest AS MAVEN_TOOL_CHAIN
+FROM maven:latest AS MAVEN_TOOL_CHAIN AS build-env
 COPY pom.xml /tmp/
 COPY src /tmp/src/
 WORKDIR /tmp/
@@ -10,14 +10,14 @@ RUN ls -l /tmp/target/dependency/BOOT-INF
 RUN ls -l /tmp/target/dependency/META-INF
 
 FROM openjdk:8-jdk-alpine
-#VOLUME /tmp
+VOLUME /tmp
 ARG DEPENDENCY=/tmp/target/dependency
 RUN echo "DEPENDENCY="${DEPENDENCY}
 RUN ls -l /tmp/target/dependency/BOOT-INF
-COPY ${DEPENDENCY}/BOOT-INF/lib /app/lib
+COPY --from=build-env ${DEPENDENCY}/BOOT-INF/lib /app/lib
 RUN ls -l /tmp/target/dependency/META-INF
-COPY ${DEPENDENCY}/META-INF /app/META-INF
+COPY --from=build-env ${DEPENDENCY}/META-INF /app/META-INF
 RUN ls -l /tmp/target/dependency/BOOT-INF/classes
 RUN ls -l ${DEPENDENCY}/BOOT-INF/classes
-COPY ${DEPENDENCY}/BOOT-INF/classes /app
+COPY --from=build-env ${DEPENDENCY}/BOOT-INF/classes /app
 ENTRYPOINT ["java","-cp","app:app/lib/*","mortgageCalculator.MortgageCalculatorController"]
