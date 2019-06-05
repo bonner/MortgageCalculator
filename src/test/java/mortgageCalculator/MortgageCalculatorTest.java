@@ -32,6 +32,8 @@ public class MortgageCalculatorTest {
 	@Test
 	public void testPaymentAmountOnlineExample() {
 		
+		// http://www.moneychimp.com/calculator/mortgage_calculator.htm
+		
 		double askingPrice = 200000, downPayment = 100000, rate = 6.;
 		String paymentSchedule = "monthly";  
 		int amortizationPeriod = 15;
