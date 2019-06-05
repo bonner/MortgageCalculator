@@ -4,10 +4,15 @@ COPY src /tmp/src/
 WORKDIR /tmp/
 RUN mvn package
 RUN ls -l /tmp 
+RUN ls -l /tmp/target 
+RUN ls -l /tmp/target/dependency 
+RUN ls -l /tmp/dependency/BOOT-INF
+RUN ls -l /tmp/dependency/META-INF
 
 FROM openjdk:8-jdk-alpine
 VOLUME /tmp
 ARG DEPENDENCY=/tmp/target/dependency
+RUN echo "DEPENDENCY="${DEPENDENCY}
 COPY ${DEPENDENCY}/BOOT-INF/lib /app/lib
 COPY ${DEPENDENCY}/META-INF /app/META-INF
 COPY ${DEPENDENCY}/BOOT-INF/classes /app
