@@ -28,7 +28,7 @@ public class MortgageCalculatorTest {
 		assertFalse(MortgageCalculator.setAnnualInterestRate(-5.0));
 		assertFalse(MortgageCalculator.setAnnualInterestRate(105.0));
 	}	
-	
+
 	@Test
 	public void testPaymentAmountOnlineExample() {
 		

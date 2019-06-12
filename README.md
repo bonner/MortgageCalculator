@@ -70,5 +70,6 @@ NOTE: if any of the below commands fail with the permission denied error in Linu
 contact bonner.mike@gmail.com for more details and inquiries. 
 
 ### TODO:
+* unit tests for controller
 * add security
 * add db backend
