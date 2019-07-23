@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -40,6 +41,7 @@ public class MortgageCalculatorController {
     }
     
     @RequestMapping(path = "/", method = RequestMethod.GET)
+    @PreAuthorize("hasAuthority('ADMIN_USER') or hasAuthority('STANDARD_USER')")
     String home() {
       return "<head><meta http-equiv=\"refresh\" content=\"0; URL='swagger-ui.html#/'\" /></head>";
     }
@@ -51,6 +53,7 @@ public class MortgageCalculatorController {
             @ApiResponse(code = 400, message = "Unexpected request data")})
     @RequestMapping(path = "/payment-amount", method = RequestMethod.GET, produces = "application/json")
     @ResponseStatus(HttpStatus.ACCEPTED)
+    @PreAuthorize("hasAuthority('ADMIN_USER') or hasAuthority('STANDARD_USER')")
     public ResponseEntity<Map<?, ?>> paymentAmount(
             @ApiParam(defaultValue = "500000") @RequestParam("asking_price") double askingPrice, 
             @ApiParam(defaultValue = "70000") @RequestParam("down_payment") double downPayment, 
@@ -77,6 +80,7 @@ public class MortgageCalculatorController {
             @ApiResponse(code = 400, message = "Unexpected request data")})
     @RequestMapping(path = "/mortgage-amount", method = RequestMethod.GET, produces = "application/json")
     @ResponseStatus(HttpStatus.ACCEPTED)
+    @PreAuthorize("hasAuthority('ADMIN_USER') or hasAuthority('STANDARD_USER')")
     public ResponseEntity<Map<?, ?>> mortgageAmount(
             @ApiParam(defaultValue = "2000") @RequestParam("payment") double payment, 
             @RequestParam(name = "down_payment", required = false) Double downPayment,
@@ -104,6 +108,7 @@ public class MortgageCalculatorController {
             @ApiResponse(code = 200, message = "Successfully retrieved interest rate", response = Map.class)})
     @RequestMapping(path = "/interest-rate", method = RequestMethod.GET, produces = "application/json")
     @ResponseStatus(HttpStatus.ACCEPTED)
+    @PreAuthorize("hasAuthority('ADMIN_USER') or hasAuthority('STANDARD_USER')")
     public ResponseEntity<Map<?, ?>> getAnnualInterestRate() {
         return resp(HttpStatus.OK, "interest_rate", MortgageCalculator.getAnnualInterestRate()); 
     }
@@ -115,6 +120,7 @@ public class MortgageCalculatorController {
             })
     @RequestMapping(path = "/interest-rate/{annualInterestRate}", method = RequestMethod.PATCH, produces = "application/json")
     @ResponseStatus(HttpStatus.ACCEPTED)
+    @PreAuthorize("hasAuthority('ADMIN_USER') or hasAuthority('STANDARD_USER')")
     public ResponseEntity<Map<?, ?>> setAnnualInterestRate(
             @ApiParam(value = "The new interest rate, must be greater than 0 and less than or equal to 100.", allowableValues = "range[0,100]") 
             @PathVariable(name = "annualInterestRate", required = true) double newAnnualInterestRate) {
