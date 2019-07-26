@@ -54,6 +54,8 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
     @Override
     public void configure(ClientDetailsServiceConfigurer configurer) throws Exception {
+        System.out.printf("\n\n\n **** HELLO ****\n\n\n");
+        System.out.printf("GRANTTYPE: %s\n", this.grantType);
         configurer
                 .inMemory()
                 .withClient(clientId)

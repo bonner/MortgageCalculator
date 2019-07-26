@@ -41,7 +41,7 @@ public class MortgageCalculatorController {
     }
     
     @RequestMapping(path = "/", method = RequestMethod.GET)
-    @PreAuthorize("hasAuthority('ADMIN_USER') or hasAuthority('STANDARD_USER')")
+    //@PreAuthorize("hasAuthority('ADMIN_USER') or hasAuthority('STANDARD_USER')")
     String home() {
       return "<head><meta http-equiv=\"refresh\" content=\"0; URL='swagger-ui.html#/'\" /></head>";
     }
